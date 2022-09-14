@@ -22,3 +22,37 @@ print(a)
 #linspace(start, stop, numOfSamples, ifEndIsInclusive, retstep, dtype, axis)
 a = np.linspace(0, 10, 5)
 print(a)
+#sort
+print(np.sort([3,2,1]))
+#concatenate
+a = np.arange(4)
+b = np.arange(4)
+print(np.concatenate((a,b)))
+
+print("a.ndim " + str(a.ndim))
+print("a.size " + str(a.size))
+print("a.shape " + str(a.shape))
+#Reshape
+c = np.arange(12)
+print(np.reshape(c, (3,4)))
+#1D array to 2D
+a = np.arange(10)
+#Row Vector
+rowV = a[np.newaxis, :]
+print(rowV)
+print(rowV.shape)
+#col Vector
+colV = a[: ,np.newaxis]
+print(colV)
+print(colV.shape)
+#expand_dims
+#adds an axis at pos 1
+a = np.arange(10)
+a = np.expand_dims(a, axis=1)
+print(a)
+print(a.shape)
+
+a = np.arange(10)
+a = np.expand_dims(a, axis=0)
+print(a)
+print(a.shape)
