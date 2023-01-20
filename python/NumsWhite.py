@@ -1,6 +1,7 @@
 import sys
-import math
-input = sys.stdin.readline
+from sys import stdin, stdout
+input = stdin.readline
+output = stdout.write
 
 ############ ---- Input Functions ---- ############
 def inp():
@@ -23,10 +24,10 @@ while t:
     while len(nums) > 1:
         a = nums[n-1]
         b = nums[n-2]
-        c = math.ceil((a+b)/2)
+        c = (int)((a+b+1)/2)
         nums.remove(a)
         nums.remove(b)
         nums.append(c)
         nums.sort()
         n -= 1
-        print(f'{a} {b}')
+        output(f'{a} {b}' + "\n")
