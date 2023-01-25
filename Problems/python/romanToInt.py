@@ -21,4 +21,4 @@ class Solution:
         return num
 
 s = Solution()
-print(s.romanToInt("XIV"))
+print(s.romanToInt("MCMXCIV"))
