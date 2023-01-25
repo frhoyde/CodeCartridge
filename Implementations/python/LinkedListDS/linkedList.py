@@ -120,7 +120,19 @@ class linkedList:
             current = current.next
 
     def reverseList(self):
-        pass
+        prev = None
+        current = self.head
+        next = self.head
+        while current:
+            next = current.next
+            current.next = prev
+            prev = current
+            current = next
+        self.head = prev
+        return self.head
+
+
+
 ll = linkedList()
 ll.printList()
 
@@ -132,11 +144,16 @@ ll.append(4)
 ll.append(5)
 ll.append(6)
 ll.append(7)
+# ll.printList()
+ll.reverseList()
 ll.printList()
-ll.insertAt(11, 3)
-ll.printList()
-ll.removeAllOf(3)
-ll.printList()
+
+
+
+# ll.insertAt(11, 3)
+# ll.printList()
+# ll.removeAllOf(3)
+# ll.printList()
 # print(ll.isIn(11))
 # print(f"Popped: {ll.removeTail()}")
 # print(f"removed {ll.remove(2)}")
