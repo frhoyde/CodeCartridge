@@ -31,12 +31,28 @@ class Queue:
         self.size -= 1
         return dq.data
 
+    def front(self):
+        return self.head
+
+    def back(self):
+        return self.tail
 
     def isEmpty(self):
         if self.head:
             return False
         else:
             return True
+
+    def clear(self):
+        self.head = None
+
+    def isIn(self, data):
+        current = self.head
+        while current:
+            if(data == current.data):
+                return True
+            current = current.next
+        return false
 
     def getSize(self):
         return self.size
