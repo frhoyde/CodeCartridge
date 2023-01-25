@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main() {
+  int T;
+  scanf("%d", &T);
+
+  while(T--){
+    int in;
+    scanf("%d", &in);
+    
+  }
+  return 0;
+}
+
