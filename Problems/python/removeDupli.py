@@ -7,7 +7,7 @@ class Solution:
 			if nums[j] != nums[i]:
 				j += 1
 				nums[j] = nums[i]
-		return j + 1
+	return j + 1
 
 s = Solution()
 s.removeDuplicates([1,1,2])
