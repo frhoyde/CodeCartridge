@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+class Solution:
+    def plusOne(self, digits: list[int]) -> list[int]:
+        pass
+    def arrToInt(self, arr):
+        sum = 0
+        x = 0
+        for i in arr:
+            sum += i * (10**x)
+        return sum
+
+
+
+
+s = Solution()
+print(s.arrToInt([1,2,3]))
