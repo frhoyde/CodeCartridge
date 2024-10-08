@@ -29,6 +29,22 @@ def install_vscode():
 def install_intellij():
     run_command("sudo tar -xzf ~/Downloads/intellij.tar.gz -C /opt/")
     run_command("sudo ln -s /opt/idea-*/bin/idea.sh /usr/local/bin/intellij")
+    create_intellij_desktop_entry()
+
+def create_intellij_desktop_entry():
+    desktop_entry = """[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[en_US]=/opt/idea-*/bin/idea.png
+Name[en_US]=IntelliJ IDEA
+Exec=/usr/local/bin/intellij
+Name=IntelliJ IDEA
+Icon=/opt/idea-*/bin/idea.png
+"""
+    run_command(f"echo '{desktop_entry}' | sudo tee /usr/share/applications/intellij.desktop")
+    run_command("sudo chmod 644 /usr/share/applications/intellij.desktop")
+    run_command("sudo chown root:root /usr/share/applications/intellij.desktop")
 
 def install_node():
     run_command("curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -")
@@ -68,4 +84,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
