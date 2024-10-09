@@ -112,6 +112,13 @@ def install_databases():
     except Exception as e:
         logging.error(f"Failed to install MySQL: {e}")
 
+def append_to_file(file_path, line):
+    try:
+        run_command(f"sudo sh -c 'echo \"{line}\" >> {file_path}'")
+        logging.info(f"Successfully appended line to file")
+    except Exception as e:
+        logging.error(f"Failed to append line to file: {e}")
+
 def main():
     install_packages()
     install_intellij()
@@ -119,6 +126,10 @@ def main():
     install_java()
     install_docker()
     install_databases()
+    
+    # Example usage of append_to_file function
+    append_to_file("/etc/hosts", "119.30.37.131 gitpath.grameenphone.com nexushub.grameenphone.com")
+    
     logging.info("Installation complete. Please restart your system to apply all changes.")
 
 if __name__ == "__main__":
