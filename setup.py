@@ -128,7 +128,6 @@ def main():
     install_databases()
     
     # Example usage of append_to_file function
-    append_to_file("/etc/hosts", "119.30.37.131 gitpath.grameenphone.com nexushub.grameenphone.com")
     
     logging.info("Installation complete. Please restart your system to apply all changes.")
 
