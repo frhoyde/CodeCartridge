@@ -1,12 +1,16 @@
 import os
 import subprocess
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def run_command(command):
     try:
         subprocess.run(command, check=True, shell=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error executing command: {command}")
-        print(f"Error details: {e}")
+        logging.error(f"Error executing command: {command}")
+        logging.error(f"Error details: {e}")
 
 def install_packages():
     packages = [
@@ -15,21 +19,25 @@ def install_packages():
         "apt-transport-https",
         "ca-certificates",
         "software-properties-common",
-        "zsh",
         "git",
         "neovim",
-        "flameshot"
+        "flameshot",
+        "python3-pip"  # Added pip installation
     ]
-    run_command(f"sudo apt update && sudo apt install -y {' '.join(packages)}")
-
-def install_vscode():
-    run_command("sudo dpkg -i ~/Downloads/vscode.deb")
-    run_command("sudo apt install -f")
+    try:
+        run_command(f"sudo apt update && sudo apt install -y {' '.join(packages)}")
+        logging.info("Packages installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install packages: {e}")
 
 def install_intellij():
-    run_command("sudo tar -xzf ~/Downloads/intellij.tar.gz -C /opt/")
-    run_command("sudo ln -s /opt/idea-*/bin/idea.sh /usr/local/bin/intellij")
-    create_intellij_desktop_entry()
+    try:
+        run_command("sudo tar -xzf ~/Downloads/intellij.tar.gz -C /opt/")
+        run_command("sudo ln -s /opt/idea-*/bin/idea.sh /usr/local/bin/intellij")
+        create_intellij_desktop_entry()
+        logging.info("IntelliJ IDEA installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install IntelliJ IDEA: {e}")
 
 def create_intellij_desktop_entry():
     desktop_entry = """[Desktop Entry]
@@ -42,45 +50,76 @@ Exec=/usr/local/bin/intellij
 Name=IntelliJ IDEA
 Icon=/opt/idea-*/bin/idea.png
 """
-    run_command(f"echo '{desktop_entry}' | sudo tee /usr/share/applications/intellij.desktop")
-    run_command("sudo chmod 644 /usr/share/applications/intellij.desktop")
-    run_command("sudo chown root:root /usr/share/applications/intellij.desktop")
+    try:
+        run_command(f"echo '{desktop_entry}' | sudo tee /usr/share/applications/intellij.desktop")
+        run_command("sudo chmod 644 /usr/share/applications/intellij.desktop")
+        run_command("sudo chown root:root /usr/share/applications/intellij.desktop")
+        logging.info("IntelliJ IDEA desktop entry created successfully")
+    except Exception as e:
+        logging.error(f"Failed to create IntelliJ IDEA desktop entry: {e}")
 
 def install_node():
-    run_command("curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -")
-    run_command("sudo apt install -y nodejs")
-    run_command("sudo npm install -g npm@latest")
-    run_command("sudo npm install -g yarn")
+    try:
+        run_command("curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash")
+        run_command("export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && \\. \"$NVM_DIR/nvm.sh\"")
+        run_command("nvm install --lts")
+        run_command("nvm use --lts")
+        run_command("npm install -g npm@latest")
+        run_command("npm install -g yarn")
+        logging.info("Node.js (via nvm), npm, and yarn installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install Node.js (via nvm), npm, or yarn: {e}")
 
 def install_java():
-    run_command("sudo apt install -y openjdk-17-jdk")
+    try:
+        run_command("sudo apt install -y openjdk-17-jdk")
+        logging.info("Java installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install Java: {e}")
 
 def install_docker():
-    run_command("curl -fsSL https://get.docker.com -o get-docker.sh")
-    run_command("sudo sh get-docker.sh")
-    run_command("sudo usermod -aG docker $USER")
-    run_command("sudo curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
-    run_command("sudo chmod +x /usr/local/bin/docker-compose")
+    try:
+        run_command("curl -fsSL https://get.docker.com -o get-docker.sh")
+        run_command("sudo sh get-docker.sh")
+        run_command("sudo usermod -aG docker $USER")
+        run_command("sudo curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
+        run_command("sudo chmod +x /usr/local/bin/docker-compose")
+        logging.info("Docker and Docker Compose installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install Docker or Docker Compose: {e}")
 
 def install_databases():
-    # PostgreSQL
-    run_command("sudo apt install -y postgresql postgresql-contrib")
-    # MongoDB
-    run_command("wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -")
-    run_command("echo \"deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse\" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list")
-    run_command("sudo apt update && sudo apt install -y mongodb-org")
-    # MySQL
-    run_command("sudo apt install -y mysql-server")
+    try:
+        # PostgreSQL
+        run_command("sudo apt install -y postgresql postgresql-contrib")
+        logging.info("PostgreSQL installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install PostgreSQL: {e}")
+
+    try:
+        # MongoDB
+        run_command("wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -")
+        run_command("echo \"deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse\" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list")
+        run_command("sudo apt update && sudo apt install -y mongodb-org")
+        logging.info("MongoDB installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install MongoDB: {e}")
+
+    try:
+        # MySQL
+        run_command("sudo apt install -y mysql-server")
+        logging.info("MySQL installed successfully")
+    except Exception as e:
+        logging.error(f"Failed to install MySQL: {e}")
 
 def main():
     install_packages()
-    install_vscode()
     install_intellij()
     install_node()
     install_java()
     install_docker()
     install_databases()
-    print("Installation complete. Please restart your system to apply all changes.")
+    logging.info("Installation complete. Please restart your system to apply all changes.")
 
 if __name__ == "__main__":
     main()
